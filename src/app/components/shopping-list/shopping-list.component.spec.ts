@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShoppingListComponent } from './shopping-list.component';
-import { ShoppingEditComponent } from './shopping-edit/shopping-edit.component';
 
 describe('ShoppingListComponent', () => {
   let component: ShoppingListComponent;
@@ -9,7 +8,7 @@ describe('ShoppingListComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ShoppingListComponent, ShoppingEditComponent],
+      declarations: [ShoppingListComponent]
     });
     fixture = TestBed.createComponent(ShoppingListComponent);
     component = fixture.componentInstance;
