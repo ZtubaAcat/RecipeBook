@@ -1,0 +1,70 @@
+<div class="row">
+  <div class="col-5">
+    <!--New Recipe Button-->
+    <div class="row">
+      <div class="col-xs-12">
+        <button class="btn btn-success" (click)="showRecipeForm = true">
+          New Recipe
+        </button>
+      </div>
+    </div>
+    <hr />
+    <!--New Recipe Button-->
+
+    <ng-container *ngFor="let recipe of recipeList; let i = index">
+      <div
+        (click)="cardClick(recipe)"
+        class="card mb-3"
+        style="max-width: 540px"
+      >
+        <div _ngcontent-bun-c28="" class="row p-2">
+          <div _ngcontent-bun-c28="" class="col-xs-12">
+            <a
+              _ngcontent-bun-c27=""
+              routerlinkactive="active"
+              class="list-group-item clearfix active"
+              style="cursor: pointer"
+            >
+              <div
+                _ngcontent-bun-c27=""
+                class="pull-left d-flex justify-content-between"
+              >
+                <div>
+                  <h4 _ngcontent-bun-c27="" class="list-group-item-heading">
+                    {{ recipe.title }}
+                  </h4>
+                  <p _ngcontent-bun-c27="" class="list-group-item-text">
+                    {{ recipe.description }}
+                  </p>
+                </div>
+                <div>
+                  <span _ngcontent-bun-c27="" class="">
+                    <img
+                      _ngcontent-bun-c27=""
+                      class="img-responsive pull-right"
+                      style="max-height: 70px"
+                      alt="Tasty Schnitzel"
+                      [src]="recipe.imgPath"
+                    />
+                  </span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="col-7">
+    <h3 style="margin: 20px" *ngIf="!activeRecipe && !showRecipeForm">
+      Please select a Recipe!
+    </h3>
+    <app-recipe-details
+      [recipe]="activeRecipe"
+      *ngIf="activeRecipe && !showRecipeForm"
+    >
+    </app-recipe-details>
+
+    <app-new-recipe *ngIf="showRecipeForm"></app-new-recipe>
+  </div>
+</div>
