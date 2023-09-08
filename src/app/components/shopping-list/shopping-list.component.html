@@ -1,10 +1,81 @@
-<app-shopping-edit (newItemEvent)="addItem($event)"></app-shopping-edit>
+<div class="row">
+  <div class="col-xs-12">
+    <form>
+      <div class="row">
+        <div class="col-sm-5 form-group">
+          <label for="name" class="shoppingName">
+            Name
+            <input
+              id="name"
+              class="form-control"
+              [formControl]="name"
+              name="nameInput"
+            />
+          </label>
+        </div>
+        <div class="col-sm-2 form-group">
+          <label for="amount">
+            Amount
+            <input
+              type="number"
+              id="amount"
+              class="form-control"
+              [formControl]="amount"
+            />
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <button
+            *ngIf="isVisible"
+            type="submit"
+            class="btn btn-success"
+            style="margin-right: 3px"
+            (click)="updateItem()"
+          >
+            Update
+          </button>
+
+          <button
+            *ngIf="!isVisible"
+            type="submit"
+            class="btn btn-success"
+            style="margin-right: 3px"
+            (click)="addItem()"
+          >
+            Add
+          </button>
+          <button
+            *ngIf="isVisible"
+            type="button"
+            (click)="deleteItem(selectedData.id)"
+            class="btn bg-danger"
+            style="color: white"
+          >
+            Delete
+          </button>
+          <button
+            type="button"
+            class="btn bg-primary"
+            style="color: white; margin-left: 3px"
+            (click)="clearInput()"
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div class="col-xs-10 list-group" style="margin-top: 10px">
   <li
     class="list-group-item"
     style="cursor: pointer"
-    *ngFor="let ingredient of ingredients"
+    *ngFor="let item of ingredients"
+    (click)="choseeItem(item.id)"
   >
-    {{ ingredient.name }} ({{ ingredient.amount }})
+    {{ item.name }} ({{ item.amount }})
   </li>
 </div>
