@@ -19,8 +19,8 @@
           _ngcontent-vjr-c34=""
           type="submit"
           class="btn btn-success"
-          disabled=""
           style="margin-right: 3px"
+          (click)="(addRecipe)"
         >
           Save</button
         ><button _ngcontent-vjr-c34="" type="button" class="btn btn-danger">
@@ -36,9 +36,9 @@
             _ngcontent-vjr-c34=""
             type="text"
             id="name"
-            formcontrolname="name"
             class="form-control ng-pristine ng-invalid ng-touched"
             style="margin-bottom: 10px"
+            formControlName="Name"
           />
         </div>
       </div>
@@ -46,7 +46,7 @@
     <div _ngcontent-vjr-c34="" class="row">
       <div _ngcontent-vjr-c34="" class="col-xs-12">
         <div _ngcontent-vjr-c34="" class="form-group">
-          <label _ngcontent-vjr-c34="" for="imagePath">Image URL</label
+          <label _ngcontent-vjr-c34="" for="imgPath">Image URL</label
           ><input
             _ngcontent-vjr-c34=""
             type="text"

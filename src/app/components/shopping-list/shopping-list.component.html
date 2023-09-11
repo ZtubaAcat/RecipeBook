@@ -38,7 +38,7 @@
           </button>
 
           <button
-            *ngIf="!isVisible"
+            *ngIf="!isVisible && !canadd; else disabledButton"
             type="submit"
             class="btn btn-success"
             style="margin-right: 3px"
@@ -46,6 +46,16 @@
           >
             Add
           </button>
+
+          <ng-template #disabledButton>
+            <button
+              type="submit"
+              class="btn"
+              style="margin-right: 3px; background-color: rgb(151, 227, 145)"
+            >
+              Add
+            </button>
+          </ng-template>
           <button
             *ngIf="isVisible"
             type="button"
@@ -79,3 +89,4 @@
     {{ item.name }} ({{ item.amount }})
   </li>
 </div>
+<p>sorunlar: add butonunun renk değiştirmesi</p>

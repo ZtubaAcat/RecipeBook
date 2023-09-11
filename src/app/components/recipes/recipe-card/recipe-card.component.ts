@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Recipe } from '../recipe.model';
+import { RecipesComponent } from '../recipes.component';
 
 @Component({
   selector: 'app-recipe-card',
@@ -8,6 +9,7 @@ import { Recipe } from '../recipe.model';
   styleUrls: ['./recipe-card.component.css'],
 })
 export class RecipeCardComponent implements OnInit {
+  @Input() recipe: RecipesComponent | any;
   activeRecipe = null;
   showRecipeForm: boolean = false;
   recipeList: any[] = [];

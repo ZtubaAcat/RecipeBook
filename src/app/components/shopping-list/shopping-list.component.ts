@@ -12,7 +12,7 @@ export class ShoppingListComponent implements OnInit {
   amount = new FormControl(0, { nonNullable: true });
   idCounter = 1;
   selectedData!: any;
-  Color: boolean = false;
+  canadd: boolean = false;
   isVisible = false;
 
   ingredients: Ingredient[] = [
@@ -25,14 +25,19 @@ export class ShoppingListComponent implements OnInit {
 
   addItem() {
     const newId = this.ingredients.length + 1;
-    const ing = {
-      id: newId,
-      name: this.name.value || '',
-      amount: this.amount.value || 0,
-    };
-    console.log(ing);
-    this.ingredients.push(ing);
-    this.clearInput();
+    const nameValue = this.name.value || '';
+    const amountValue = this.amount.value || 0;
+    if (this.name.value !== '' && this.amount.value > 0) {
+      this.canadd = true;
+      const ing = {
+        id: newId,
+        name: nameValue,
+        amount: amountValue,
+      };
+      this.canadd = true;
+      this.ingredients.push(ing);
+      this.clearInput();
+    }
   }
 
   choseeItem(id: number) {
@@ -48,6 +53,7 @@ export class ShoppingListComponent implements OnInit {
     this.name.reset();
     this.amount.reset();
     this.isVisible = false;
+    this.canadd = false;
   }
   updateItem() {
     console.log('tıklandı ');

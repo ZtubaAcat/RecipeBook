@@ -6,6 +6,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { RecipesComponent } from '../recipes.component';
 
 @Component({
   selector: 'app-recipe-details',
@@ -13,7 +14,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./recipe-details.component.css'],
 })
 export class RecipeDetailsComponent implements OnInit, OnChanges {
-  @Input() recipe: any;
+  @Input() recipe: RecipesComponent | any;
   constructor(private route: ActivatedRoute) {}
   ngOnInit(): void {
     //console.log(this.recipe);

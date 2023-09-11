@@ -6,7 +6,8 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Ingredient } from '../../../ingredient.model';
+import { RecipeDetailsComponent } from '../recipe-details/recipe-details.component';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-new-recipe',
@@ -14,19 +15,38 @@ import { Ingredient } from '../../../ingredient.model';
   styleUrls: ['./new-recipe.component.css'],
 })
 export class NewRecipeComponent implements OnInit {
-  @Input() recipe: any;
+  @Input() recipe: RecipeDetailsComponent | any;
+  name = new FormControl('');
+  imgPath = new FormControl('');
+  description = new FormControl('');
+  ingredient = new FormControl([]);
   recipeList = {
     name: '',
     imagePath: '',
     description: '',
-    ingredients: [
-      { name: '', amount: null }, // Varsayılan olarak boş bir öğe ekleyebilirsiniz
-    ],
+    ingredients: [{ name: '', amount: null }],
   };
   constructor(private route: ActivatedRoute) {}
   ngOnInit(): void {}
   ngOnChanges(changes: SimpleChanges): void {
     console.log(this.recipe);
+  }
+  addRecipe() {
+    const newId = this.recipe.length + 1;
+    const nameValue = this.name.value || '';
+    const imagePathValue = this.imgPath.value || '';
+    const descriptionValue = this.description.value || '';
+    const ingerdientsValue = this.ingredient.value || [];
+    if (nameValue !== '' && imagePathValue !== '' && descriptionValue !== '') {
+      const list = {
+        name: nameValue,
+        imgPath: imagePathValue,
+        description: descriptionValue,
+        ingredient: ingerdientsValue,
+      };
+      this.recipe.push(list);
+      console.log(list);
+    }
   }
   addIngredient() {
     this.recipe.ingredients.push({ name: '', amount: null }); // Yeni bir boş içerik ekleme
@@ -41,11 +61,9 @@ export class NewRecipeComponent implements OnInit {
   cancelForm() {}
 
   resetForm() {
-    this.recipe = {
-      name: '',
-      imagePath: '',
-      description: '',
-      ingredients: [{ name: '', amount: null }], // Yeni bir boş içerik ekleyin
-    };
+    this.name.reset();
+    this.imgPath.reset();
+    this.description.reset();
+    this.ingredient.reset();
   }
 }
