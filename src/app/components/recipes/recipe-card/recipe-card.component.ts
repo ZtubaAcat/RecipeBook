@@ -1,7 +1,24 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Recipe } from '../recipe.model';
-import { RecipesComponent } from '../recipes.component';
+
+type s = {
+  name: string;
+  amount: number;
+};
+
+export type recipeList = {
+  title: string;
+  description: string;
+  imgPath: string;
+  ingredients: s[];
+};
 
 @Component({
   selector: 'app-recipe-card',
@@ -9,13 +26,16 @@ import { RecipesComponent } from '../recipes.component';
   styleUrls: ['./recipe-card.component.css'],
 })
 export class RecipeCardComponent implements OnInit {
-  @Input() recipe: RecipesComponent | any;
+  @Input() recipe: recipeList | any;
+  @Output() recipeAdded = new EventEmitter<recipeList>();
+
   activeRecipe = null;
   showRecipeForm: boolean = false;
-  recipeList: any[] = [];
+  recipeList: recipeList[] = [];
   cardId!: number;
   constructor(private route: ActivatedRoute) {}
   ngOnInit(): void {
+    console.log(this.recipeList);
     this.recipeList.push({
       title: 'Tasty Schnitzel',
       description: 'A super-tasty Schnitzel - just awesome!',
@@ -57,5 +77,8 @@ export class RecipeCardComponent implements OnInit {
   cardClick(recipe: any) {
     this.activeRecipe = recipe;
     this.showRecipeForm = false;
+  }
+  onRecipeAdded(newRecipe: recipeList) {
+    this.recipeList.push(newRecipe);
   }
 }

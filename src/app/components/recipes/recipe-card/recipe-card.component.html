@@ -65,6 +65,9 @@
     >
     </app-recipe-details>
 
-    <app-new-recipe *ngIf="showRecipeForm"></app-new-recipe>
+    <app-new-recipe
+      *ngIf="showRecipeForm"
+      (recipeAdded)="onRecipeAdded($event)"
+    ></app-new-recipe>
   </div>
 </div>

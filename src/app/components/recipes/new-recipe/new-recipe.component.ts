@@ -1,13 +1,17 @@
 import {
   Component,
+  EventEmitter,
   Input,
-  OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { RecipeDetailsComponent } from '../recipe-details/recipe-details.component';
 import { FormControl } from '@angular/forms';
+import {
+  RecipeCardComponent,
+  recipeList,
+} from '../recipe-card/recipe-card.component';
 
 @Component({
   selector: 'app-new-recipe',
@@ -15,48 +19,52 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./new-recipe.component.css'],
 })
 export class NewRecipeComponent implements OnInit {
-  @Input() recipe: RecipeDetailsComponent | any;
+  @Input() recipe: RecipeCardComponent | any;
+  @Output() recipeAdded = new EventEmitter<recipeList>();
   name = new FormControl('');
   imgPath = new FormControl('');
   description = new FormControl('');
-  ingredient = new FormControl([]);
-  recipeList = {
-    name: '',
-    imagePath: '',
-    description: '',
-    ingredients: [{ name: '', amount: null }],
-  };
+  ingredientName = new FormControl('');
+  ingredientAmount = new FormControl(0);
+  recipeList: recipeList[] = [];
   constructor(private route: ActivatedRoute) {}
   ngOnInit(): void {}
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.recipe);
+    console.log(this.recipeList);
   }
+
   addRecipe() {
-    const newId = this.recipe.length + 1;
-    const nameValue = this.name.value || '';
-    const imagePathValue = this.imgPath.value || '';
-    const descriptionValue = this.description.value || '';
-    const ingerdientsValue = this.ingredient.value || [];
-    if (nameValue !== '' && imagePathValue !== '' && descriptionValue !== '') {
-      const list = {
-        name: nameValue,
-        imgPath: imagePathValue,
-        description: descriptionValue,
-        ingredient: ingerdientsValue,
+    const title = this.name.value || '';
+    const imgPath = this.imgPath.value || '';
+    const description = this.description.value || '';
+    const ingredientName = this.ingredientName || '';
+    const ingredientAmount = this.ingredientAmount || 0;
+
+    if (title !== '' && imgPath !== '' && description !== '') {
+      const newRecipe: recipeList = {
+        title,
+        imgPath,
+        description,
+        ingredients: [
+          {
+            name: ingredientName.value!,
+            amount: ingredientAmount.value!,
+          },
+        ],
       };
-      this.recipe.push(list);
-      console.log(list);
+
+      this.recipeAdded.emit(newRecipe);
+      this.resetForm();
     }
-  }
-  addIngredient() {
-    this.recipe.ingredients.push({ name: '', amount: null }); // Yeni bir boş içerik ekleme
+
+    console.log(this.recipe);
   }
 
   removeIngredient(index: number) {
-    this.recipe.ingredients.splice(index, 1); // Belirtilen index'e sahip içeriği silme
+    this.recipe.ingredients.splice(index, 1);
   }
 
-  saveForm() {}
+  addIngredient() {}
 
   cancelForm() {}
 
@@ -64,6 +72,7 @@ export class NewRecipeComponent implements OnInit {
     this.name.reset();
     this.imgPath.reset();
     this.description.reset();
-    this.ingredient.reset();
+    this.ingredientName.reset();
+    this.ingredientAmount.reset();
   }
 }

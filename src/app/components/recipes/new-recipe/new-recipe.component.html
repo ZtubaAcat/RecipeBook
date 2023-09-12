@@ -20,7 +20,7 @@
           type="submit"
           class="btn btn-success"
           style="margin-right: 3px"
-          (click)="(addRecipe)"
+          (click)="addRecipe()"
         >
           Save</button
         ><button _ngcontent-vjr-c34="" type="button" class="btn btn-danger">
@@ -38,7 +38,7 @@
             id="name"
             class="form-control ng-pristine ng-invalid ng-touched"
             style="margin-bottom: 10px"
-            formControlName="Name"
+            [formControl]="name"
           />
         </div>
       </div>
@@ -51,8 +51,8 @@
             _ngcontent-vjr-c34=""
             type="text"
             id="imagePath"
-            formcontrolname="imagePath"
             class="form-control ng-untouched ng-pristine ng-invalid"
+            [formControl]="imgPath"
           />
         </div>
       </div>
@@ -70,9 +70,9 @@
             _ngcontent-vjr-c34=""
             type="text"
             id="description"
-            formcontrolname="description"
             rows="6"
             class="form-control ng-untouched ng-pristine ng-invalid"
+            [formControl]="description"
           ></textarea>
         </div>
       </div>
@@ -80,12 +80,38 @@
     <div _ngcontent-vjr-c34="" class="row">
       <div
         _ngcontent-vjr-c34=""
-        formarrayname="ingredients"
         class="col-xs-12 ng-untouched ng-pristine ng-valid"
       >
         <hr _ngcontent-vjr-c34="" />
         <div _ngcontent-vjr-c34="" class="row">
-          <div _ngcontent-vjr-c34="" class="col-xs-12">
+          <div class="row">
+            <div class="form-group col-sm-4">
+              <label for="name" class="shoppingName">
+                Name
+                <input
+                  id="name"
+                  class="form-control"
+                  [formControl]="ingredientName"
+                  name="nameInput"
+                />
+              </label>
+            </div>
+            <div class="col-sm-2 form-group">
+              <label for="amount">
+                Amount
+                <input
+                  type="number"
+                  id="amount"
+                  class="form-control"
+                  [formControl]="ingredientAmount"
+                />
+              </label>
+            </div>
+            <div class="col-sm-4" style="margin-top: 26px">
+              <button type="reset" class="btn-danger btn col-sm-2">X</button>
+            </div>
+          </div>
+          <div _ngcontent-vjr-c34="" class="col-xs-12" style="margin-top: 6px">
             <button _ngcontent-vjr-c34="" type="button" class="btn btn-success">
               Add Ingredient
             </button>
