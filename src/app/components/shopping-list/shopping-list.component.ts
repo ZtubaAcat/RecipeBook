@@ -1,5 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 import { Ingredient } from 'src/app/ingredient.model';
 import { recipeList } from '../recipes/recipe-card/recipe-card.component';
 
@@ -12,67 +17,109 @@ export class ShoppingListComponent implements OnInit {
   @Output() listadded = new EventEmitter<Ingredient>();
   @Input() recipeFromRecipeCard: recipeList | any;
 
-  name = new FormControl('');
-  amount = new FormControl(0, { nonNullable: true });
+  form: FormGroup;
+  buttonStyle = {};
   idCounter = 1;
-  selectedData!: any;
+  selectedData: Ingredient | undefined;
   canadd: boolean = false;
   isVisible = false;
 
-  ingredients: Ingredient[] = [
-    {
-      id: 1,
-      name: 'Apple',
-      amount: 2,
-    },
-  ];
+  ingredients: Ingredient[] = [];
+
+  constructor(private formBuilder: FormBuilder) {
+    this.form = formBuilder.group({
+      name: ['', Validators.required],
+      amount: [0, [Validators.required, this.amountValidator]],
+    });
+
+    // Local Storage'dan verileri al
+    const storedIngredients = localStorage.getItem('ingredients');
+    if (storedIngredients) {
+      this.ingredients = JSON.parse(storedIngredients);
+    }
+  }
 
   addItem() {
-    const newId = this.ingredients.length + 1;
-    const nameValue = this.name.value || '';
-    const amountValue = this.amount.value || 0;
-    if (this.name.value !== '' && this.amount.value > 0) {
-      this.canadd = true;
-      const ing = {
+    const newId = this.idCounter++;
+    const nameValue = this.form.get('name')?.value || '';
+    const amountValue = this.form.get('amount')?.value || 0;
+
+    if (nameValue !== '' && amountValue > 0) {
+      const ing: Ingredient = {
         id: newId,
         name: nameValue,
         amount: amountValue,
       };
-      this.canadd = true;
       this.ingredients.push(ing);
       this.clearInput();
+      this.updateButtonStyle();
+
+      // Yeni öğeyi local storage'a kaydet
+      localStorage.setItem('ingredients', JSON.stringify(this.ingredients));
     }
   }
 
-  choseeItem(id: number) {
+  chooseItem(id: number) {
     this.selectedData = this.ingredients.find((item) => item.id === id);
 
     if (this.selectedData) {
       this.isVisible = true;
-      this.name.setValue(this.selectedData.name);
-      this.amount.setValue(this.selectedData.amount);
+      this.form.patchValue({
+        name: this.selectedData.name,
+        amount: this.selectedData.amount,
+      });
     }
   }
+
   clearInput() {
-    this.name.reset();
-    this.amount.reset();
+    this.form.reset({
+      name: '',
+      amount: 0,
+    });
     this.isVisible = false;
     this.canadd = false;
   }
+
   updateItem() {
     console.log('tıklandı ');
     if (this.selectedData) {
-      this.selectedData.name = this.name.value;
-      this.selectedData.amount = this.amount.value;
+      this.selectedData.name = this.form.get('name')?.value;
+      this.selectedData.amount = this.form.get('amount')?.value;
       this.clearInput();
       this.isVisible = false;
+
+      // Öğeyi local storage'dan güncelle
+      localStorage.setItem('ingredients', JSON.stringify(this.ingredients));
     }
   }
 
   deleteItem(id: number) {
     this.ingredients = this.ingredients.filter((item) => item.id !== id);
     this.clearInput();
+
+    // Öğeyi local storage'dan kaldır
+    localStorage.setItem('ingredients', JSON.stringify(this.ingredients));
   }
 
-  ngOnInit(): void {}
+  updateButtonStyle() {
+    if (this.form.valid) {
+      this.buttonStyle = { 'background-color': 'green' };
+    } else {
+      this.buttonStyle = { 'background-color': 'lightgreen' };
+    }
+  }
+
+  amountValidator(control: any) {
+    const amountValue = control.value;
+    if (amountValue === null || amountValue === undefined) {
+      return null; // Geçerli kabul et, eğer değer yoksa
+    }
+    return amountValue > 0 ? null : { amountInvalid: true };
+  }
+
+  ngOnInit(): void {
+    this.form.valueChanges.subscribe(() => {
+      this.updateButtonStyle();
+    });
+  }
 }

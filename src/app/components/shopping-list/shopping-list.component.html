@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-xs-12">
-    <form>
+    <form [formGroup]="form">
       <div class="row">
         <div class="col-sm-5 form-group">
           <label for="name" class="shoppingName">
@@ -8,7 +8,7 @@
             <input
               id="name"
               class="form-control"
-              [formControl]="name"
+              formControlName="name"
               name="nameInput"
             />
           </label>
@@ -20,7 +20,7 @@
               type="number"
               id="amount"
               class="form-control"
-              [formControl]="amount"
+              formControlName="amount"
             />
           </label>
         </div>
@@ -38,27 +38,18 @@
           </button>
 
           <button
-            *ngIf="!isVisible && !canadd; else disabledButton"
-            type="submit"
+            *ngIf="!isVisible"
+            type="button"
             class="btn"
-            [ngClass]="{ 'btn-success': canadd }"
+            [ngStyle]="buttonStyle"
             style="margin-right: 3px"
             (click)="addItem()"
           >
             Add
           </button>
 
-          <ng-template #disabledButton>
-            <button
-              type="submit"
-              class="btn"
-              style="margin-right: 3px; background-color: rgb(151, 227, 145)"
-            >
-              Add
-            </button>
-          </ng-template>
           <button
-            *ngIf="isVisible"
+            *ngIf="isVisible && selectedData"
             type="button"
             (click)="deleteItem(selectedData.id)"
             class="btn bg-danger"
@@ -85,7 +76,7 @@
     class="list-group-item"
     style="cursor: pointer"
     *ngFor="let item of ingredients"
-    (click)="choseeItem(item.id)"
+    (click)="chooseItem(item.id)"
   >
     {{ item.name }} ({{ item.amount }})
   </li>

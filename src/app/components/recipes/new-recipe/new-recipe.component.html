@@ -1,118 +1,125 @@
-<style>
-  input.ng-invalid.ng-touched[_ngcontent-vjr-c34],
-  textarea.ng-invalid.ng-touched[_ngcontent-vjr-c34] {
-    border: 1px solid red;
-  }
-  label {
-    font-size: 18px;
-  }
-</style>
-<div _ngcontent-vjr-c34="" class="col-xs-12">
-  <form
-    _ngcontent-vjr-c34=""
-    novalidate=""
-    class="ng-pristine ng-invalid ng-touched"
-  >
-    <div _ngcontent-vjr-c34="" class="row">
-      <div _ngcontent-vjr-c34="" class="col-xs-12">
+<div class="col-xs-12">
+  <form [formGroup]="recipeForm" novalidate>
+    <div class="row">
+      <div class="col-xs-12">
         <button
-          _ngcontent-vjr-c34=""
           type="submit"
           class="btn btn-success"
           style="margin-right: 3px"
           (click)="addRecipe()"
         >
-          Save</button
-        ><button _ngcontent-vjr-c34="" type="button" class="btn btn-danger">
+          Save
+        </button>
+        <button type="button" class="btn btn-danger" (click)="resetForm()">
           Cancel
         </button>
       </div>
     </div>
-    <div _ngcontent-vjr-c34="" class="row">
-      <div _ngcontent-vjr-c34="" class="col-xs-12">
-        <div _ngcontent-vjr-c34="" class="form-group">
-          <label _ngcontent-vjr-c34="" for="name">Name</label
-          ><input
-            _ngcontent-vjr-c34=""
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
             type="text"
             id="name"
-            class="form-control ng-pristine ng-invalid ng-touched"
-            style="margin-bottom: 10px"
-            [formControl]="name"
+            class="form-control"
+            formControlName="name"
+            [ngClass]="{
+              'has-error':
+                recipeForm.get('name')?.invalid &&
+                recipeForm.get('name')?.touched
+            }"
           />
         </div>
       </div>
     </div>
-    <div _ngcontent-vjr-c34="" class="row">
-      <div _ngcontent-vjr-c34="" class="col-xs-12">
-        <div _ngcontent-vjr-c34="" class="form-group">
-          <label _ngcontent-vjr-c34="" for="imgPath">Image URL</label
-          ><input
-            _ngcontent-vjr-c34=""
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label for="imgPath">Image URL</label>
+          <input
             type="text"
-            id="imagePath"
-            class="form-control ng-untouched ng-pristine ng-invalid"
-            [formControl]="imgPath"
+            id="imgPath"
+            class="form-control"
+            formControlName="imgPath"
+            [ngClass]="{
+              'has-error':
+                recipeForm.get('imgPath')?.invalid &&
+                recipeForm.get('imgPath')?.touched
+            }"
           />
         </div>
       </div>
     </div>
-    <div _ngcontent-vjr-c34="" class="row">
-      <div _ngcontent-vjr-c34="" class="col-xs-12">
-        <img _ngcontent-vjr-c34="" class="img-responsive" src="" />
+    <div class="row">
+      <div class="col-xs-12">
+        <img class="img-responsive" [src]="recipeForm.get('imgPath')?.value" />
       </div>
     </div>
-    <div _ngcontent-vjr-c34="" class="row">
-      <div _ngcontent-vjr-c34="" class="col-xs-12">
-        <div _ngcontent-vjr-c34="" class="form-group">
-          <label _ngcontent-vjr-c34="" for="description">Description</label
-          ><textarea
-            _ngcontent-vjr-c34=""
-            type="text"
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea
             id="description"
             rows="6"
-            class="form-control ng-untouched ng-pristine ng-invalid"
-            [formControl]="description"
+            class="form-control"
+            formControlName="description"
+            [ngClass]="{
+              'has-error':
+                recipeForm.get('description')?.invalid &&
+                recipeForm.get('description')?.touched
+            }"
           ></textarea>
         </div>
       </div>
     </div>
-    <div _ngcontent-vjr-c34="" class="row">
-      <div
-        _ngcontent-vjr-c34=""
-        class="col-xs-12 ng-untouched ng-pristine ng-valid"
-      >
-        <hr _ngcontent-vjr-c34="" />
-        <div _ngcontent-vjr-c34="" class="row">
-          <div class="row">
-            <div class="form-group col-sm-4">
-              <label for="name" class="shoppingName">
-                Name
+    <div class="row">
+      <div class="col-xs-12">
+        <hr />
+        <div class="row">
+          <div *ngIf="showForm">
+            <div class="row">
+              <div class="form-group col-sm-4">
+                <label for="ingredientName"> </label>
                 <input
-                  id="name"
+                  id="ingredientName"
                   class="form-control"
-                  [formControl]="ingredientName"
+                  formControlName="ingredientName"
                   name="nameInput"
+                  [ngClass]="{
+                    'has-error':
+                      recipeForm.get('ingredientName')?.invalid &&
+                      recipeForm.get('ingredientName')?.touched
+                  }"
                 />
-              </label>
-            </div>
-            <div class="col-sm-2 form-group">
-              <label for="amount">
-                Amount
+              </div>
+              <div class="col-sm-2 form-group">
+                <label for="ingredientAmount"></label>
                 <input
                   type="number"
-                  id="amount"
+                  id="ingredientAmount"
                   class="form-control"
-                  [formControl]="ingredientAmount"
+                  formControlName="ingredientAmount"
                 />
-              </label>
-            </div>
-            <div class="col-sm-4" style="margin-top: 26px">
-              <button type="reset" class="btn-danger btn col-sm-2">X</button>
+              </div>
+              <div class="col-sm-4" style="margin-top: 26px">
+                <button
+                  type="button"
+                  class="btn-danger btn col-sm-2"
+                  (click)="removeIngredient()"
+                >
+                  X
+                </button>
+              </div>
             </div>
           </div>
-          <div _ngcontent-vjr-c34="" class="col-xs-12" style="margin-top: 6px">
-            <button _ngcontent-vjr-c34="" type="button" class="btn btn-success">
+          <div class="col-xs-12" style="margin-top: 6px">
+            <button
+              type="button"
+              class="btn btn-success"
+              (click)="addIngredients()"
+            >
               Add Ingredient
             </button>
           </div>

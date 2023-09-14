@@ -1,13 +1,6 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   RecipeCardComponent,
   recipeList,
@@ -23,35 +16,37 @@ export class NewRecipeComponent implements OnInit {
   @Input() recipeList: recipeList[] = [];
   @Output() recipeAdded = new EventEmitter<recipeList>();
 
-  name = new FormControl('');
-  imgPath = new FormControl('');
-  description = new FormControl('');
-  ingredientName = new FormControl('');
-  ingredientAmount = new FormControl(0);
+  recipeForm = new FormGroup({
+    name: new FormControl('', Validators.required),
+    imgPath: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
+    ingredientName: new FormControl(''),
+    ingredientAmount: new FormControl(0),
+  });
+
+  showForm = false;
+
   constructor(private route: ActivatedRoute) {}
+
   ngOnInit(): void {}
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.recipeList);
-  }
 
   addRecipe() {
-    console.log(this.recipeList);
+    if (this.recipeForm.valid) {
+      const title = this.recipeForm.get('name')?.value || '';
+      const imgPath = this.recipeForm.get('imgPath')?.value || '';
+      const description = this.recipeForm.get('description')?.value || '';
+      const ingredientName = this.recipeForm.get('ingredientName')?.value || '';
+      const ingredientAmount =
+        this.recipeForm.get('ingredientAmount')?.value || 0;
 
-    const title = this.name.value || '';
-    const imgPath = this.imgPath.value || '';
-    const description = this.description.value || '';
-    const ingredientName = this.ingredientName || '';
-    const ingredientAmount = this.ingredientAmount || 0;
-
-    if (title !== '' && imgPath !== '' && description !== '') {
       const newRecipe: recipeList = {
         title,
         imgPath,
         description,
         ingredients: [
           {
-            name: ingredientName.value!,
-            amount: ingredientAmount.value!,
+            name: ingredientName,
+            amount: ingredientAmount,
           },
         ],
       };
@@ -59,23 +54,25 @@ export class NewRecipeComponent implements OnInit {
       this.recipeAdded.emit(newRecipe);
       this.resetForm();
     }
-
-    console.log(this.recipe);
   }
-
-  removeIngredient(index: number) {
-    this.recipe.ingredients.splice(index, 1);
-  }
-
-  addIngredient() {}
-
-  cancelForm() {}
 
   resetForm() {
-    this.name.reset();
-    this.imgPath.reset();
-    this.description.reset();
-    this.ingredientName.reset();
-    this.ingredientAmount.reset();
+    this.recipeForm.reset({
+      name: '',
+      imgPath: '',
+      description: '',
+      ingredientName: '',
+      ingredientAmount: 0,
+    });
+  }
+
+  addIngredients() {
+    this.showForm = true;
+  }
+
+  removeIngredient() {
+    this.showForm = false;
+    this.recipeForm.get('ingredientName')?.reset('');
+    this.recipeForm.get('ingredientAmount')?.reset(0);
   }
 }
