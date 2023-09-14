@@ -30,11 +30,9 @@ export class RecipeCardComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.loadRecipesFromLocalStorage(); // Sayfa yenilendiğinde verileri yükle
+    this.loadRecipesFromLocalStorage();
 
-    this.route.queryParams.subscribe((params) => {
-      // Query parametresine göre özel bir işlem yapabilirsiniz (isteğe bağlı)
-    });
+    this.route.queryParams.subscribe((params) => {});
   }
 
   loadRecipesFromLocalStorage() {
@@ -91,12 +89,13 @@ export class RecipeCardComponent implements OnInit {
 
   onRecipeAdded(newRecipe: recipeList) {
     this.recipeList.push(newRecipe);
-    this.saveRecipesToLocalStorage(); // Yeni tarif eklediğinizde local storage'a kaydet
+    this.saveRecipesToLocalStorage();
+    this.showRecipeForm = false;
   }
 
   deleteRecipe(index: any): void {
     this.recipeList.splice(this.activeRecipeIndex, 1);
     this.activeRecipe = null;
-    this.saveRecipesToLocalStorage(); // Tarifi sildiğinizde local storage'dan kaldır
+    this.saveRecipesToLocalStorage();
   }
 }

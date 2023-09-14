@@ -33,6 +33,13 @@
         </div>
       </div>
     </div>
+    <div class="col-xs-12">
+      <img
+        class="img-responsive"
+        [src]="recipeForm.get('imgPath')?.value"
+        style="height: 200px; margin: 10px"
+      />
+    </div>
     <div class="row">
       <div class="col-xs-12">
         <div class="form-group">
@@ -51,11 +58,7 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-xs-12">
-        <img class="img-responsive" [src]="recipeForm.get('imgPath')?.value" />
-      </div>
-    </div>
+    <div class="row"></div>
     <div class="row">
       <div class="col-xs-12">
         <div class="form-group">
@@ -119,6 +122,7 @@
               type="button"
               class="btn btn-success"
               (click)="addIngredients()"
+              style="margin-bottom: 40px"
             >
               Add Ingredient
             </button>
