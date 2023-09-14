@@ -40,7 +40,8 @@
           <button
             *ngIf="!isVisible && !canadd; else disabledButton"
             type="submit"
-            class="btn btn-success"
+            class="btn"
+            [ngClass]="{ 'btn-success': canadd }"
             style="margin-right: 3px"
             (click)="addItem()"
           >
@@ -89,4 +90,3 @@
     {{ item.name }} ({{ item.amount }})
   </li>
 </div>
-<p>sorunlar: add butonunun renk değiştirmesi</p>

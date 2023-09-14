@@ -28,11 +28,12 @@ export type recipeList = {
 export class RecipeCardComponent implements OnInit {
   @Input() recipe: recipeList | any;
   @Output() recipeAdded = new EventEmitter<recipeList>();
-
+  @Output() recipeDeleted = new EventEmitter<number>();
   activeRecipe = null;
   showRecipeForm: boolean = false;
   recipeList: recipeList[] = [];
-  cardId!: number;
+  activeRecipeIndex!: number;
+
   constructor(private route: ActivatedRoute) {}
   ngOnInit(): void {
     console.log(this.recipeList);
@@ -68,17 +69,19 @@ export class RecipeCardComponent implements OnInit {
         },
       ],
     });
-    this.route.params.subscribe((params) => {
-      this.cardId = +params['id'];
-      console.log(this.recipeList[this.cardId]);
-    });
   }
 
-  cardClick(recipe: any) {
+  cardClick(recipe: any, recipeIndex: number) {
     this.activeRecipe = recipe;
+    this.activeRecipeIndex = recipeIndex;
     this.showRecipeForm = false;
+    console.log(this.recipeList);
   }
   onRecipeAdded(newRecipe: recipeList) {
     this.recipeList.push(newRecipe);
+  }
+  deleteRecipe(index: any): void {
+    this.recipeList.splice(this.activeRecipeIndex, 1);
+    this.activeRecipe = null;
   }
 }

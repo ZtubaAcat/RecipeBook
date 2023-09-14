@@ -13,7 +13,7 @@
 
     <ng-container *ngFor="let recipe of recipeList; let i = index">
       <div
-        (click)="cardClick(recipe)"
+        (click)="cardClick(recipe, i)"
         class="card mb-3"
         style="max-width: 540px"
       >
@@ -62,6 +62,7 @@
     <app-recipe-details
       [recipe]="activeRecipe"
       *ngIf="activeRecipe && !showRecipeForm"
+      (recipeDeleted)="deleteRecipe($event)"
     >
     </app-recipe-details>
 

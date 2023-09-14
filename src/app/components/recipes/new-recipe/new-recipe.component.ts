@@ -20,13 +20,14 @@ import {
 })
 export class NewRecipeComponent implements OnInit {
   @Input() recipe: RecipeCardComponent | any;
+  @Input() recipeList: recipeList[] = [];
   @Output() recipeAdded = new EventEmitter<recipeList>();
+
   name = new FormControl('');
   imgPath = new FormControl('');
   description = new FormControl('');
   ingredientName = new FormControl('');
   ingredientAmount = new FormControl(0);
-  recipeList: recipeList[] = [];
   constructor(private route: ActivatedRoute) {}
   ngOnInit(): void {}
   ngOnChanges(changes: SimpleChanges): void {
@@ -34,6 +35,8 @@ export class NewRecipeComponent implements OnInit {
   }
 
   addRecipe() {
+    console.log(this.recipeList);
+
     const title = this.name.value || '';
     const imgPath = this.imgPath.value || '';
     const description = this.description.value || '';

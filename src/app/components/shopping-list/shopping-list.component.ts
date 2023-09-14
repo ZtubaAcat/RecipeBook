@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Ingredient } from 'src/app/ingredient.model';
+import { recipeList } from '../recipes/recipe-card/recipe-card.component';
 
 @Component({
   selector: 'app-shopping-list',
@@ -8,6 +9,9 @@ import { Ingredient } from 'src/app/ingredient.model';
   styleUrls: ['./shopping-list.component.css'],
 })
 export class ShoppingListComponent implements OnInit {
+  @Output() listadded = new EventEmitter<Ingredient>();
+  @Input() recipeFromRecipeCard: recipeList | any;
+
   name = new FormControl('');
   amount = new FormControl(0, { nonNullable: true });
   idCounter = 1;
@@ -69,5 +73,6 @@ export class ShoppingListComponent implements OnInit {
     this.ingredients = this.ingredients.filter((item) => item.id !== id);
     this.clearInput();
   }
+
   ngOnInit(): void {}
 }
