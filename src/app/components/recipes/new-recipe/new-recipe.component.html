@@ -81,47 +81,50 @@
       <div class="col-xs-12">
         <hr />
         <div class="row">
-          <div *ngIf="showForm">
-            <div class="row">
-              <div class="form-group col-sm-4">
-                <label for="ingredientName"> </label>
-                <input
-                  id="ingredientName"
-                  class="form-control"
-                  formControlName="ingredientName"
-                  name="nameInput"
-                  [ngClass]="{
-                    'has-error':
-                      recipeForm.get('ingredientName')?.invalid &&
-                      recipeForm.get('ingredientName')?.touched
-                  }"
-                />
-              </div>
-              <div class="col-sm-2 form-group">
-                <label for="ingredientAmount"></label>
-                <input
-                  type="number"
-                  id="ingredientAmount"
-                  class="form-control"
-                  formControlName="ingredientAmount"
-                />
-              </div>
-              <div class="col-sm-4" style="margin-top: 26px">
-                <button
-                  type="button"
-                  class="btn-danger btn col-sm-2"
-                  (click)="removeIngredient()"
-                >
-                  X
-                </button>
+          <ng-container formArrayName="ingredients">
+            <div
+              *ngFor="
+                let ingredientGroup of ingredients.controls;
+                let i = index
+              "
+            >
+              <div [formGroup]="ingredientGroup">
+                <div class="row">
+                  <div class="form-group col-sm-4">
+                    <label for="ingredientName{{ i }}"> </label>
+                    <input
+                      id="ingredientName{{ i }}"
+                      class="form-control"
+                      formControlName="ingredientName"
+                    />
+                  </div>
+                  <div class="col-sm-2 form-group">
+                    <label for="ingredientAmount{{ i }}"> </label>
+                    <input
+                      type="number"
+                      id="ingredientAmount{{ i }}"
+                      class="form-control"
+                      formControlName="ingredientAmount"
+                    />
+                  </div>
+                  <div class="col-sm-4" style="margin-top: 26px">
+                    <button
+                      type="button"
+                      class="btn-danger btn col-sm-2"
+                      (click)="removeIngredient(i)"
+                    >
+                      X
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </ng-container>
           <div class="col-xs-12" style="margin-top: 6px">
             <button
               type="button"
               class="btn btn-success"
-              (click)="addIngredients()"
+              (click)="addIngredient()"
               style="margin-bottom: 40px"
             >
               Add Ingredient

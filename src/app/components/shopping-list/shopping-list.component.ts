@@ -32,7 +32,6 @@ export class ShoppingListComponent implements OnInit {
       amount: [0, [Validators.required, this.amountValidator]],
     });
 
-    // Local Storage'dan verileri al
     const storedIngredients = localStorage.getItem('ingredients');
     if (storedIngredients) {
       this.ingredients = JSON.parse(storedIngredients);
@@ -54,7 +53,6 @@ export class ShoppingListComponent implements OnInit {
       this.clearInput();
       this.updateButtonStyle();
 
-      // Yeni öğeyi local storage'a kaydet
       localStorage.setItem('ingredients', JSON.stringify(this.ingredients));
     }
   }
@@ -88,7 +86,6 @@ export class ShoppingListComponent implements OnInit {
       this.clearInput();
       this.isVisible = false;
 
-      // Öğeyi local storage'dan güncelle
       localStorage.setItem('ingredients', JSON.stringify(this.ingredients));
     }
   }
@@ -97,7 +94,6 @@ export class ShoppingListComponent implements OnInit {
     this.ingredients = this.ingredients.filter((item) => item.id !== id);
     this.clearInput();
 
-    // Öğeyi local storage'dan kaldır
     localStorage.setItem('ingredients', JSON.stringify(this.ingredients));
   }
 
@@ -112,7 +108,7 @@ export class ShoppingListComponent implements OnInit {
   amountValidator(control: any) {
     const amountValue = control.value;
     if (amountValue === null || amountValue === undefined) {
-      return null; // Geçerli kabul et, eğer değer yoksa
+      return null;
     }
     return amountValue > 0 ? null : { amountInvalid: true };
   }

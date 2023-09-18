@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import {
   RecipeCardComponent,
   recipeList,
@@ -20,11 +20,8 @@ export class NewRecipeComponent implements OnInit {
     name: new FormControl('', Validators.required),
     imgPath: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
-    ingredientName: new FormControl(''),
-    ingredientAmount: new FormControl(0),
+    ingredients: new FormArray([]),
   });
-
-  showForm = false;
 
   constructor(private route: ActivatedRoute) {}
 
@@ -32,47 +29,51 @@ export class NewRecipeComponent implements OnInit {
 
   addRecipe() {
     if (this.recipeForm.valid) {
+      console.log(this.recipeForm.value);
       const title = this.recipeForm.get('name')?.value || '';
       const imgPath = this.recipeForm.get('imgPath')?.value || '';
       const description = this.recipeForm.get('description')?.value || '';
-      const ingredientName = this.recipeForm.get('ingredientName')?.value || '';
-      const ingredientAmount =
-        this.recipeForm.get('ingredientAmount')?.value || 0;
+
+      const ingredients = this.recipeForm.get('ingredients') as FormArray;
+      const ingredientData = ingredients.controls.map((control) => ({
+        name: control.get('ingredientName')?.value || '',
+        amount: control.get('ingredientAmount')?.value || 0,
+      }));
 
       const newRecipe: recipeList = {
         title,
         imgPath,
         description,
-        ingredients: [
-          {
-            name: ingredientName,
-            amount: ingredientAmount,
-          },
-        ],
+        ingredients: ingredientData,
       };
 
       this.recipeAdded.emit(newRecipe);
       this.resetForm();
     }
   }
-
   resetForm() {
     this.recipeForm.reset({
       name: '',
       imgPath: '',
       description: '',
-      ingredientName: '',
-      ingredientAmount: 0,
+      ingredients: [],
     });
   }
 
-  addIngredients() {
-    this.showForm = true;
+  addIngredient() {
+    const ingredientGroup = new FormGroup({
+      ingredientName: new FormControl(''),
+      ingredientAmount: new FormControl(0),
+    });
+
+    this.ingredients.push(ingredientGroup);
   }
 
-  removeIngredient() {
-    this.showForm = false;
-    this.recipeForm.get('ingredientName')?.reset('');
-    this.recipeForm.get('ingredientAmount')?.reset(0);
+  removeIngredient(index: number) {
+    this.ingredients.removeAt(index);
+  }
+
+  get ingredients() {
+    return this.recipeForm.get('ingredients') as any;
   }
 }
