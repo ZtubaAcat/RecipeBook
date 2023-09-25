@@ -7,6 +7,7 @@ import { Ingredient } from './ingredient.model';
   providedIn: 'root',
 })
 export class RecipeService {
+  private localStorageKey = 'ingredients';
   private recipeListSubject = new BehaviorSubject<RecipeList[]>([]);
   recipeList$ = this.recipeListSubject.asObservable();
 
@@ -42,11 +43,16 @@ export class RecipeService {
     recipes.splice(index, 1);
     this.saveRecipesToLocalStorage(recipes);
   }
+  getIngredients(): Ingredient[] {
+    const ingredientsStr = localStorage.getItem(this.localStorageKey);
+    return ingredientsStr ? JSON.parse(ingredientsStr) : [];
+  }
 
-  addToShoppingList(ingredients: Ingredient[]) {
-    const currentShoppingList = this.shoppingListSubject.value;
-    currentShoppingList.push(...ingredients);
-    this.shoppingListSubject.next(currentShoppingList);
+  addIngredients(ingredient: Ingredient): void {
+    const ingredients = this.getIngredients();
+    ingredients.push(ingredient);
+    localStorage.setItem(this.localStorageKey, JSON.stringify(ingredients));
+    console.log(ingredient);
   }
   updateRecipe(activeIndex: any, recipeData: any) {
     const storedRecipes = localStorage.getItem('recipes');

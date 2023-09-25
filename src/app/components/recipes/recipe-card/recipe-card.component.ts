@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RecipeService } from '../../../recipe.service';
 import { RecipeList } from '../../../recipe.model';
+import { Ingredient } from 'src/app/ingredient.model';
 
 @Component({
   selector: 'app-recipe-card',
@@ -41,11 +42,6 @@ export class RecipeCardComponent implements OnInit {
     this.recipeService.deleteRecipe(this.activeRecipeIndex);
   }
 
-  shoppingList(index: any): void {
-    this.recipeService.addToShoppingList(
-      this.recipeList[this.activeRecipeIndex].ingredients
-    );
-  }
   cardClick(recipe: any, recipeIndex: number) {
     this.activeRecipe = recipe;
     this.activeRecipeIndex = recipeIndex;
@@ -63,5 +59,14 @@ export class RecipeCardComponent implements OnInit {
   }
   recipeEdited() {
     this.showRecipeForm = false;
+  }
+  shoppingList(recipe: RecipeList) {
+    console.log('tıklandıs');
+    console.log(this.recipeList);
+    if (recipe.ingredients !== undefined) {
+      for (let i = 0; i < recipe.ingredients.length; i++) {
+        this.recipeService.addIngredients(recipe.ingredients[i]);
+      }
+    }
   }
 }

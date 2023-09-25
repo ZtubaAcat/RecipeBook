@@ -11,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { RecipeList } from 'src/app/recipe.model';
 import { RecipeService } from 'src/app/recipe.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-new-recipe',
@@ -90,7 +91,7 @@ export class NewRecipeComponent implements OnInit, OnChanges {
     const ingredientData = ingredients.controls.map((control) => ({
       name: control.get('ingredientName')?.value || '',
       amount: control.get('ingredientAmount')?.value || 0,
-      id: ingredients.length + 1,
+      id: uuidv4(),
     }));
 
     const newRecipe: RecipeList = {
@@ -121,7 +122,7 @@ export class NewRecipeComponent implements OnInit, OnChanges {
     const ingredientData = ingredients.controls.map((control) => ({
       name: control.get('ingredientName')?.value || '',
       amount: control.get('ingredientAmount')?.value || 0,
-      id: ingredients.length + 1,
+      id: uuidv4(),
     }));
 
     const newRecipe: RecipeList = {

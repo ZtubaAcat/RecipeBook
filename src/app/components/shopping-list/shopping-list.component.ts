@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RecipeService } from 'src/app/recipe.service';
 import { Ingredient } from 'src/app/ingredient.model';
 import { RecipeList } from 'src/app/recipe.model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-shopping-list',
@@ -38,7 +39,7 @@ export class ShoppingListComponent implements OnInit {
   }
 
   addItem() {
-    const newId = this.idCounter++;
+    const newId = uuidv4();
     const nameValue = this.form.get('name')?.value || '';
     const amountValue = this.form.get('amount')?.value || 0;
 
@@ -57,7 +58,7 @@ export class ShoppingListComponent implements OnInit {
     }
   }
 
-  chooseItem(id: number) {
+  chooseItem(id: string) {
     this.selectedData = this.ingredients.find((item) => item.id === id);
 
     if (this.selectedData) {
@@ -89,7 +90,7 @@ export class ShoppingListComponent implements OnInit {
     }
   }
 
-  deleteItem(id: number) {
+  deleteItem(id: string) {
     this.ingredients = this.ingredients.filter((item) => item.id !== id);
     this.clearInput();
 

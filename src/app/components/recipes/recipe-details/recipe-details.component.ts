@@ -25,7 +25,10 @@ export class RecipeDetailsComponent implements OnInit, OnChanges {
   @Output() toShoppingList = new EventEmitter<RecipeList>();
   @Output() editRecipeEmitter = new EventEmitter<RecipeList>();
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private recipeService: RecipeService
+  ) {}
 
   ngOnInit(): void {}
   ngOnChanges(changes: SimpleChanges): void {}
@@ -34,7 +37,9 @@ export class RecipeDetailsComponent implements OnInit, OnChanges {
   }
 
   shoppingList() {
-    // this.toShoppingList.emit();
+    if (this.recipe && this.recipe.ingredients) {
+      this.toShoppingList.emit(this.recipe);
+    }
   }
 
   editRecipe() {
