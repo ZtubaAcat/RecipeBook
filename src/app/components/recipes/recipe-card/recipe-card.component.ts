@@ -1,17 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-
-type s = {
-  name: string;
-  amount: number;
-};
-
-export type recipeList = {
-  title: string;
-  description: string;
-  imgPath: string;
-  ingredients: s[];
-};
+import { RecipeService } from '../../../recipe.service';
+import { RecipeList } from '../../../recipe.model';
 
 @Component({
   selector: 'app-recipe-card',
@@ -19,83 +8,60 @@ export type recipeList = {
   styleUrls: ['./recipe-card.component.css'],
 })
 export class RecipeCardComponent implements OnInit {
-  @Input() recipe: recipeList | any;
-  @Output() recipeAdded = new EventEmitter<recipeList>();
+  @Input() recipe: RecipeList | any;
+  @Output() recipeAdded = new EventEmitter<RecipeList>();
   @Output() recipeDeleted = new EventEmitter<number>();
-  activeRecipe = null;
-  showRecipeForm: boolean = false;
-  recipeList: recipeList[] = [];
-  activeRecipeIndex!: number;
+  @Output() toShoppingList = new EventEmitter<RecipeList>();
+  @Output() editRecipeClicked = new EventEmitter<RecipeList>();
 
-  constructor(private route: ActivatedRoute) {}
+  recipeList: RecipeList[] = [];
+  activeRecipeIndex!: number;
+  showRecipeForm: boolean = false;
+  activeRecipe: any = null;
+
+  constructor(private recipeService: RecipeService) {}
 
   ngOnInit(): void {
     this.loadRecipesFromLocalStorage();
-
-    this.route.queryParams.subscribe((params) => {});
   }
 
   loadRecipesFromLocalStorage() {
-    const storedRecipes = localStorage.getItem('recipes');
-
-    if (storedRecipes) {
-      this.recipeList = JSON.parse(storedRecipes);
-    } else {
-      this.recipeList.push({
-        title: 'Tasty Schnitzel',
-        description: 'A super-tasty Schnitzel - just awesome!',
-        imgPath:
-          'https://upload.wikimedia.org/wikipedia/commons/7/72/Schnitzel.JPG',
-        ingredients: [
-          {
-            name: 'meat',
-            amount: 1,
-          },
-          {
-            name: 'fries',
-            amount: 20,
-          },
-        ],
-      });
-
-      this.recipeList.push({
-        title: 'Big Fat Burger',
-        description: 'What else you need to say?',
-        imgPath:
-          'https://upload.wikimedia.org/wikipedia/commons/b/be/Burger_King_Angus_Bacon_%26_Cheese_Steak_Burger.jpg',
-        ingredients: [
-          {
-            name: 'apple',
-            amount: 1,
-          },
-          {
-            name: 'cheese',
-            amount: 20,
-          },
-        ],
-      });
-    }
+    this.recipeService.loadRecipesFromLocalStorage();
+    this.recipeService.recipeList$.subscribe((recipes: RecipeList[]) => {
+      this.recipeList = recipes;
+    });
   }
 
-  saveRecipesToLocalStorage() {
-    localStorage.setItem('recipes', JSON.stringify(this.recipeList));
-  }
-
-  cardClick(recipe: any, recipeIndex: number) {
-    this.activeRecipe = recipe;
-    this.activeRecipeIndex = recipeIndex;
-    this.showRecipeForm = false;
-  }
-
-  onRecipeAdded(newRecipe: recipeList) {
-    this.recipeList.push(newRecipe);
-    this.saveRecipesToLocalStorage();
+  onRecipeAdded(newRecipe: RecipeList) {
+    this.recipeService.addRecipe(newRecipe);
     this.showRecipeForm = false;
   }
 
   deleteRecipe(index: any): void {
-    this.recipeList.splice(this.activeRecipeIndex, 1);
+    this.recipeService.deleteRecipe(this.activeRecipeIndex);
+  }
+
+  shoppingList(index: any): void {
+    this.recipeService.addToShoppingList(
+      this.recipeList[this.activeRecipeIndex].ingredients
+    );
+  }
+  cardClick(recipe: any, recipeIndex: number) {
+    this.activeRecipe = recipe;
+    this.activeRecipeIndex = recipeIndex;
+    this.showRecipeForm = false;
+    this.recipeService.setActiveRecipe(this.activeRecipe);
+  }
+  editRecipe() {
+    this.activeRecipe.activeIndex = this.activeRecipeIndex;
+    console.log('tıklandı');
+    this.showRecipeForm = true;
+  }
+  addNewRecipe() {
     this.activeRecipe = null;
-    this.saveRecipesToLocalStorage();
+    this.showRecipeForm = true;
+  }
+  recipeEdited() {
+    this.showRecipeForm = false;
   }
 }

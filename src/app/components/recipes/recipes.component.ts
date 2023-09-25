@@ -7,8 +7,6 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./recipes.component.css'],
 })
 export class RecipesComponent implements OnInit {
-  recipeList: any[] = [];
-  cardId!: number;
   constructor(private route: ActivatedRoute) {}
   ngOnInit(): void {}
 }

@@ -7,6 +7,8 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import { RecipeService } from 'src/app/recipe.service';
+import { RecipeList } from 'src/app/recipe.model';
 import { ActivatedRoute } from '@angular/router';
 
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
@@ -20,18 +22,22 @@ import { ShoppingListComponent } from '../../shopping-list/shopping-list.compone
 export class RecipeDetailsComponent implements OnInit, OnChanges {
   @Input() recipe: RecipeCardComponent | any;
   @Output() recipeDeleted = new EventEmitter<number>();
-  @Input() shoppingLİst: ShoppingListComponent | any;
+  @Output() toShoppingList = new EventEmitter<RecipeList>();
+  @Output() editRecipeEmitter = new EventEmitter<RecipeList>();
+
   constructor(private route: ActivatedRoute) {}
 
-  ngOnInit(): void {
-    //console.log(this.recipe);
-  }
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.recipe);
-  }
+  ngOnInit(): void {}
+  ngOnChanges(changes: SimpleChanges): void {}
   deleteRecipe() {
     this.recipeDeleted.emit();
   }
-  addShopping() {}
-  toShoopingList() {}
+
+  shoppingList() {
+    // this.toShoppingList.emit();
+  }
+
+  editRecipe() {
+    this.editRecipeEmitter.emit();
+  }
 }

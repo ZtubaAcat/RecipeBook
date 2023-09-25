@@ -44,10 +44,20 @@
           Manage Recipe
         </a>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">To Shopping List</a></li>
-          <li><a class="dropdown-item" href="#">Edit Recipe</a></li>
           <li>
-            <a class="dropdown-item" (click)="deleteRecipe()">Delete Recipe</a>
+            <a class="dropdown-item" (click)="shoppingList()"
+              >To Shopping List</a
+            >
+          </li>
+          <li>
+            <button class="dropdown-item" (click)="editRecipe()">
+              Edit Recipe
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item" (click)="deleteRecipe()">
+              Delete Recipe
+            </button>
           </li>
         </ul>
       </button>

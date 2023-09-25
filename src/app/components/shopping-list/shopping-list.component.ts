@@ -1,12 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RecipeService } from 'src/app/recipe.service';
 import { Ingredient } from 'src/app/ingredient.model';
-import { recipeList } from '../recipes/recipe-card/recipe-card.component';
+import { RecipeList } from 'src/app/recipe.model';
 
 @Component({
   selector: 'app-shopping-list',
@@ -15,7 +11,7 @@ import { recipeList } from '../recipes/recipe-card/recipe-card.component';
 })
 export class ShoppingListComponent implements OnInit {
   @Output() listadded = new EventEmitter<Ingredient>();
-  @Input() recipeFromRecipeCard: recipeList | any;
+  @Input() recipeFromRecipeCard: RecipeList | any;
 
   form: FormGroup;
   buttonStyle = {};
@@ -26,7 +22,10 @@ export class ShoppingListComponent implements OnInit {
 
   ingredients: Ingredient[] = [];
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private recipeService: RecipeService
+  ) {
     this.form = formBuilder.group({
       name: ['', Validators.required],
       amount: [0, [Validators.required, this.amountValidator]],
@@ -54,6 +53,7 @@ export class ShoppingListComponent implements OnInit {
       this.updateButtonStyle();
 
       localStorage.setItem('ingredients', JSON.stringify(this.ingredients));
+      console.log(ing);
     }
   }
 
@@ -79,7 +79,6 @@ export class ShoppingListComponent implements OnInit {
   }
 
   updateItem() {
-    console.log('tıklandı ');
     if (this.selectedData) {
       this.selectedData.name = this.form.get('name')?.value;
       this.selectedData.amount = this.form.get('amount')?.value;

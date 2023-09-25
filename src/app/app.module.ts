@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RecipesComponent } from './components/recipes/recipes.component';
 import { RecipeDetailsComponent } from './components/recipes/recipe-details/recipe-details.component';
-
+import { RecipeService } from './recipe.service';
 import { RecipeCardComponent } from './components/recipes/recipe-card/recipe-card.component';
 import { NewRecipeComponent } from './components/recipes/new-recipe/new-recipe.component';
 
@@ -25,7 +25,8 @@ import { NewRecipeComponent } from './components/recipes/new-recipe/new-recipe.c
     NewRecipeComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, ReactiveFormsModule],
-  providers: [],
+
+  providers: [RecipeService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

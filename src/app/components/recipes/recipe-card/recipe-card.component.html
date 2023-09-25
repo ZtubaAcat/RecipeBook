@@ -3,7 +3,7 @@
     <!--New Recipe Button-->
     <div class="row">
       <div class="col-xs-12">
-        <button class="btn btn-success" (click)="showRecipeForm = true">
+        <button class="btn btn-success" (click)="addNewRecipe()">
           New Recipe
         </button>
       </div>
@@ -63,12 +63,15 @@
       [recipe]="activeRecipe"
       *ngIf="activeRecipe && !showRecipeForm"
       (recipeDeleted)="deleteRecipe($event)"
+      (editRecipeEmitter)="editRecipe()"
     >
     </app-recipe-details>
 
     <app-new-recipe
       *ngIf="showRecipeForm"
       (recipeAdded)="onRecipeAdded($event)"
+      [editRecipeData]="activeRecipe"
+      (recipeEdited)="recipeEdited()"
     ></app-new-recipe>
   </div>
 </div>
